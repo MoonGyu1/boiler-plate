@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const port = 5000
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const { User } = require("./models/User");
 
 const config = require('./config/key');
@@ -12,6 +13,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 //application/json
 app.use(bodyParser.json());
+
+app.use(cookieParser());
 
 
 const mongoose = require('mongoose');
@@ -55,9 +58,13 @@ app.post('/login', (req, res) => {
             
             //3. 일치한다면, 유저를 위한 토큰 생성
             user.generateToken((err, user) => {
-                
+                if(err) return res.status(400).send(err);
+
+                // 토큰을 저장(위치? 쿠키, 로컬스토리지, 세션 등등)
+                res.cookie("x_auth", user.token) //(Name, Value)
+                .status(200)
+                .json({ loginSuccess: true, userId: user._id })
             })
-            
         })
     })
 })
