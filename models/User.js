@@ -51,11 +51,21 @@ userSchema.pre('save', function( next ){
                 //암호화된 비밀먼호(hash)를 만드는데 성공했다면
                 user.password = hash
                 next() //다음 위치로 보냄
-            });
-        }); 
+            })
+        }) 
+    } else {
+        next()
     }
 })
 
+//메소드 생성
+userSchema.methods.comparePassword = function(plainPassword, cb) {
+    //plainPassword를 암호화해서 db에 저장된 비밀번호와 비교
+    bcrypt.compare(plainPassword, this.password, function(err, isMatch) {
+        if(err) return cb(err),
+        cb(null, isMatch) //(에러없음, true)
+    })
+}
 const User = mongoose.model('User', userSchema);
 
 module.exports = {User}
