@@ -29,6 +29,7 @@ app.post('/register', (req, res) => {
 
     const user = new User(req.body)
 
+    //유저 정보를 저장하기 '전에' 암호화 -> next()
     user.save((err, userInfo) => {
         if(err) return res.json({ success: false, err })
         return res.status(200).json({
