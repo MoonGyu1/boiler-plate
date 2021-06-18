@@ -13,12 +13,12 @@ app.use(bodyParser.json());
 
 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb+srvn://gyuwonMoon:ans2056@boilerplate.uzk6g.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', {
+mongoose.connect('mongodb+srv://gyuwonMoon:ans2056@boilerplate.uzk6g.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', {
   useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false
 }).then(() => console.log('MongoDB Connected...'))
 .catch(err => console.log(err))
 
-app.get('/', (req, res) => res.send('Hello World! 안뇽뇽안'))
+app.get('/', (req, res) => res.send('Hello World!bb'))
 
 
 app.post('/register', (req, res) => {
