@@ -79,6 +79,23 @@ userSchema.methods.generateToken = function(cb) {
         cb(null, user)
     })
 }
+
+//statics는 인스턴스를 생성하지 않아도 메소드 호출 가능
+userSchema.statics.findByToken = function ( token, cb ) {
+    var user = this;
+
+    //가져온 token을 복호화
+    jwt.verify(token, 'secretToken', function(err, decoded){
+        //유저 아이디(decoded)를 이용해서 유저를 찾은 후
+        //클라이언트에서 가져온 token과 DB에 있는 token을 비교
+        user.findOne({"_id": decoded, "token": token}, function(err, user){
+            if(err) return cb(err);
+            cb(null, user)
+        })
+    })
+}
+
+
 const User = mongoose.model('User', userSchema);
 
 module.exports = {User}

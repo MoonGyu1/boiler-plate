@@ -3,6 +3,7 @@ const app = express()
 const port = 5000
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const { auth } = require('./middleware/auth');
 const { User } = require("./models/User");
 
 const config = require('./config/key');
@@ -26,7 +27,7 @@ mongoose.connect(config.mongoURI, {
 app.get('/', (req, res) => res.send('Hello World!bb'))
 
 
-app.post('/register', (req, res) => {
+app.post('/api/users/register', (req, res) => {
     //회원 가입시 필요한 정보들을 client에서 가져오면
     //그것들을 데이터베이스에 넣어줌
 
@@ -41,7 +42,7 @@ app.post('/register', (req, res) => {
     })
 })
 
-app.post('/login', (req, res) => {
+app.post('/api/users/login', (req, res) => {
     //1. 요청된 이메일이 DB에 있는지 확인
     User.findOne({ email: req.body.email }, (err, user) => {
         if(!user) {
@@ -68,4 +69,25 @@ app.post('/login', (req, res) => {
         })
     })
 })
+
+//authentication 인증
+
+//미들웨어: 요청에 대한 응답을 완수하기 전까지 중간에 다양한 일을 처리
+//엔드포인트에서 요청을 받은 후, 콜백 function 실행 전 작동
+app.get('/api/users/auth', auth , (req, res) => { //auth: 미들웨어
+    //미들웨어 통과(인증 성공) 후 
+    
+    res.status(200).json({
+        _id: req.user._id,
+        isAdmin: req.user.role === 0 ? false : true,
+        isAuth: true,
+        email: req.user.email,
+        name: req.user.name,
+        lastname: req.user.lastname,
+        role: req.user.role,
+        image: req.user.image
+    })
+})
+
+
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
