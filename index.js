@@ -89,5 +89,18 @@ app.get('/api/users/auth', auth , (req, res) => { //auth: 미들웨어
     })
 })
 
+app.get('/api/users/logout', auth, (req, res) => {
+    //1. 로그아웃하려는 유저를 DB에서 찾음
+    User.findOneAndUpdate({_id: req.user._id},
+        //2. DB에서 그 유저의 토큰을 지움
+        { token: "" },
+        (err, user) => {
+            if(err) return res.json({ success: false, err });
+            return res.status(200).send({
+                success: true
+            })
+        })
+})
+
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))

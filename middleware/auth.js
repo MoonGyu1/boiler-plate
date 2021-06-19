@@ -13,7 +13,7 @@ let auth = (req, res, next) => {
         if(!user) return res.json({ isAuth: false, error: true })
 
         //3-2. 유저가 있으면 인증 OK
-        // (auth라우터 내에서 현재 token과 user정보를 사용할 수 있도록 req에 저장해줌)
+        // (auth 미들웨어를 사용하는 라우터 내에서 현재 token과 user정보를 사용할 수 있도록 req에 저장해줌)
         req.token = token;
         req.user = user;
 
