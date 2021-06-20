@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react'
 import axios from 'axios';
-
+import { withRouter } from 'react-router-dom';
 
 // axios.get('http://localhost:5000/api/hello'
 // -> 클라이언트 포트: 3000번, 서버 포트: 5000번
@@ -40,4 +40,4 @@ function LandingPage(props) {
     )
 }
 
-export default LandingPage
+export default withRouter(LandingPage)
